@@ -12,3 +12,25 @@ $bornDate = {
     11 => "16/07/1988",
     20 => "11/11/2000"
 }
+function calcularIdade($dataNascimento) {
+    $dataAtual = new DateTime();
+    $dataNascimento = DateTime::createFromFormat('d/m/Y', $dataNascimento);
+    $diferenca = $dataAtual->diff($dataNascimento);
+    return $diferenca->y;
+}
+
+// Gerar um array associativo com a idade de cada usuário
+$idades = [];
+foreach ($bornDate as $userId => $dataNascimento) {
+    $idades[$userId] = calcularIdade($dataNascimento);
+}
+
+// Ordenar os usuários com base em suas idades (do mais velho ao mais novo)
+arsort($idades);
+
+// Exibir a lista de usuários ordenados por idade
+foreach ($idades as $userId => $idade) {
+    $nomeUsuario = $users[$userId];
+    $dataNascimento = $bornDate[$userId];
+    echo "$nomeUsuario tem $idade anos e nasceu no dia $dataNascimento <br>";
+}
