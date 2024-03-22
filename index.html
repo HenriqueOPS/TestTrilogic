@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lista de Usuários</title>
+</head>
+<body>
+<h1>Lista de Usuários</h1>
+
+<?php
+// Função para formatar o telefone para o formato desejado
+function formatarTelefone($telefone) {
+    return preg_replace('/(\d{2})(\d)(\d{4})(\d{4})/', '($1) $2-$3-$4', $telefone);
+}
+
+// Faz uma requisição à API para obter os usuários
+$dados_usuarios_json = file_get_contents('https://jsonplaceholder.typicode.com/users');
+$usuarios = json_decode($dados_usuarios_json, true);
+
+// Ordena os usuários em ordem alfabética pelo nome
+usort($usuarios, function($a, $b) {
+    return strcmp($a['name'], $b['name']);
+});
+
+// Exibe os usuários na página
+echo '<ul>';
+foreach ($usuarios as $usuario) {
+    $nome = $usuario['name'];
+    $nomeUsuario = $usuario['username'];
+    $telefone = formatarTelefone($usuario['phone']);
+    $companhia = $usuario['company']['name'];
+
+    echo "
+        <li>
+            <strong>Nome:</strong> $nome<br>
+            <strong>Nome de Usuário:</strong> $nomeUsuario<br>
+            <strong>Telefone:</strong> $telefone<br>
+            <strong>Companhia:</strong> $companhia<br>
+            <br>
+        </li>";
+}
+echo '</ul>';
+?>
+
+</body>
+</html>
